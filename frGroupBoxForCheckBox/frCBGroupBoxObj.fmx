@@ -1,0 +1,77 @@
+object CBGroupBoxObj: TCBGroupBoxObj
+  Size.Width = 221.000000000000000000
+  Size.Height = 209.000000000000000000
+  Size.PlatformDefault = False
+  OnResize = FrameResize
+  object rcBase: TRectangle
+    Align = Client
+    Fill.Color = claNull
+    Size.Width = 221.000000000000000000
+    Size.Height = 209.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claNull
+    Stroke.Thickness = 0.000000000000000000
+    object rcOuterContent: TRectangle
+      Align = Client
+      Fill.Color = claNull
+      Margins.Left = 3.000000000000000000
+      Margins.Top = 3.000000000000000000
+      Margins.Right = 3.000000000000000000
+      Margins.Bottom = 3.000000000000000000
+      Size.Width = 215.000000000000000000
+      Size.Height = 203.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claCrimson
+      object rcContent: TRectangle
+        Align = Client
+        Fill.Color = claNull
+        Padding.Left = 10.000000000000000000
+        Padding.Top = 10.000000000000000000
+        Padding.Right = 10.000000000000000000
+        Padding.Bottom = 10.000000000000000000
+        Margins.Left = 2.000000000000000000
+        Margins.Top = 1.000000000000000000
+        Margins.Right = 2.000000000000000000
+        Margins.Bottom = 2.000000000000000000
+        Size.Width = 211.000000000000000000
+        Size.Height = 178.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claMaroon
+        Stroke.Thickness = 2.000000000000000000
+      end
+      object rcOuterTirle: TRectangle
+        Align = Top
+        Fill.Color = claNull
+        Size.Width = 215.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Thickness = 0.000000000000000000
+        object rcTitle: TRectangle
+          Align = Left
+          Fill.Color = claWhitesmoke
+          Size.Width = 177.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          Stroke.Color = claCrimson
+          object txtTitle: TText
+            Align = Left
+            AutoSize = True
+            Margins.Left = 5.000000000000000000
+            Margins.Top = 1.000000000000000000
+            Margins.Right = 1.000000000000000000
+            Margins.Bottom = 1.000000000000000000
+            Position.X = 5.000000000000000000
+            Position.Y = 1.000000000000000000
+            Size.Width = 159.082839965820300000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Title Here - set by property'
+            TextSettings.Font.Size = 13.000000000000000000
+            TextSettings.WordWrap = False
+            TextSettings.HorzAlign = Leading
+          end
+        end
+      end
+    end
+  end
+end
