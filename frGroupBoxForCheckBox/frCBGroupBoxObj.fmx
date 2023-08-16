@@ -39,7 +39,7 @@ object CBGroupBoxObj: TCBGroupBoxObj
         Stroke.Color = claMaroon
         Stroke.Thickness = 2.000000000000000000
       end
-      object rcOuterTirle: TRectangle
+      object rcOuterTitle: TRectangle
         Align = Top
         Fill.Color = claNull
         Size.Width = 215.000000000000000000
@@ -63,7 +63,7 @@ object CBGroupBoxObj: TCBGroupBoxObj
             Position.X = 5.000000000000000000
             Position.Y = 1.000000000000000000
             Size.Width = 159.082839965820300000
-            Size.Height = 20.000000000000000000
+            Size.Height = 17.291015625000000000
             Size.PlatformDefault = False
             Text = 'Title Here - set by property'
             TextSettings.Font.Size = 13.000000000000000000

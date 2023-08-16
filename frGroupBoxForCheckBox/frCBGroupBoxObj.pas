@@ -9,6 +9,8 @@ unit frCBGroupBoxObj;
 //##            : single - true: single selection, false: for multiple        //
 //##            : checked_names - returns array of string: checkbox names     //
 //##            : checked_objects - returns array of Tcheckbox: objects       //
+//##            : unchecked_names - returns array of string: checkbox names   //
+//##            : unchecked_objects - returns array of Tcheckbox: objects     //
 //##            : padding - padding for checkbox content                      //
 //############################################################################//
 //##    DATE    INITS VER  Comments                                           //
@@ -17,6 +19,8 @@ unit frCBGroupBoxObj;
 //## 2023/08/16  DRM  002  added resize on frame title                        //
 //## 2023/08/16  DRM  003  added an inner content so align top is possible    //
 //##                  003  added design frame and customisable padding        //
+//## 2023/08/16  DRM  004  added options to return unchecked boxes            //
+//## 2023/08/17  DRM  005  hide title if blank text passed                    //
 //############################################################################//
 
 //just add checkboxes to rcContent
@@ -33,7 +37,7 @@ type
     rcTitle: TRectangle;
     txtTitle: TText;
     rcContent: TRectangle;
-    rcOuterTirle: TRectangle;
+    rcOuterTitle: TRectangle;
     procedure FrameResize(Sender: TObject);
   private
     Ftitle: string;
@@ -51,11 +55,15 @@ type
     procedure FframecolorW(aCol: TAlphacolor);
     procedure FtitlecolorW(aCol: TAlphacolor);
     procedure FpaddingW(aValue: single);
+    function GetUnChecked: TArray<string>;
+    function GetUnCheckedObj: TArray<TCheckbox>;
   public
     constructor Create(AOwner: TComponent); override;
     property title: string read Ftitle write SetFtitle;
     property checked_names: TArray<string> read GetChecked;
     property checked_objects: TArray<TCheckBox> read GetCheckedObj;
+    property unchecked_names: TArray<string> read GetUnChecked;
+    property unchecked_objects: TArray<TCheckBox> read GetUnCheckedObj;
     property single: Boolean read FSingle write FSingle;
     property basecolor: TAlphaColor read Fbasecolor write FbasecolorW;
     property framecolor: TAlphaColor read Fframecolor write FframecolorW;
@@ -74,19 +82,20 @@ begin
   basecolor:=TAlphaColorRec.null;
   framecolor:=TAlphaColorRec.Gainsboro;
   titlecolor:=TAlphaColorRec.Black;
-  title:='AA';
+  title:='';
   single:=false;
   rcTitle.Width:=txtTitle.Width+7;
   rcTitle.Height:=txtTitle.Height+3;
-  rcOuterTirle.Height:=txtTitle.Height+4;
+  rcOuterTitle.Height:=txtTitle.Height+4;
   rcTitle.Position.Y:=rcOuterContent.Position.y;
   rcTitle.Position.X:=rcOuterContent.Position.x;
   rcOuterContent.Margins.Top:=3;
-  rcContent.Stroke.Color:=TAlphaColorRec.Null;
+  rcContent.Stroke.Color:=TAlphaColorRec.Null;  // #003
 
 end;
 
 procedure TCBGroupBoxObj.FpaddingW(aValue: single);
+// #003
 begin
   Fpadding:=aValue;
   rcContent.Padding.Left:=aValue;
@@ -130,8 +139,6 @@ var
   Child: TControl;
 begin
   SetLength(Result, 0);
-  // Iterate through the children of rcContent and
-  // collect the names of checked checkboxes
   for I := 0 to rcContent.ControlsCount - 1 do
   begin
     Child := rcContent.Controls[I];
@@ -149,12 +156,47 @@ var
   Child: TControl;
 begin
   SetLength(FCheckBoxes, 0);
-  // Iterate through the children of rcContent and
-  // collect the names of checked checkboxes
   for I := 0 to rcContent.ControlsCount - 1 do
   begin
     Child := rcContent.Controls[I];
     if (Child is TCheckBox) and (TCheckBox(Child).IsChecked) then
+    begin
+      SetLength(FCheckBoxes, Length(FCheckBoxes) + 1);
+      Result[Length(FCheckBoxes) - 1] := (Child as TCheckBox);
+    end;
+  end;
+  result:=FCheckBoxes;
+end;
+
+function TCBGroupBoxObj.GetUnChecked: TArray<string>;
+//004 new feature - suggested by Sasho Bozhinov on forums
+var
+  I: integer;
+  Child: TControl;
+begin
+  SetLength(Result, 0);
+  for I := 0 to rcContent.ControlsCount - 1 do
+  begin
+    Child := rcContent.Controls[I];
+    if (Child is TCheckBox) and (not(TCheckBox(Child).IsChecked)) then
+    begin
+      SetLength(Result, Length(Result) + 1);
+      Result[Length(Result) - 1] := Child.Name;
+    end;
+  end;
+end;
+
+function TCBGroupBoxObj.GetUnCheckedObj: TArray<TCheckbox>;
+//004 new feature - suggested by Sasho Bozhinov on forums
+var
+  I: integer;
+  Child: TControl;
+begin
+  SetLength(FCheckBoxes, 0);
+  for I := 0 to rcContent.ControlsCount - 1 do
+  begin
+    Child := rcContent.Controls[I];
+    if (Child is TCheckBox) and (not(TCheckBox(Child).IsChecked)) then
     begin
       SetLength(FCheckBoxes, Length(FCheckBoxes) + 1);
       Result[Length(FCheckBoxes) - 1] := (Child as TCheckBox);
@@ -171,11 +213,16 @@ var
   Child: TControl;
   begin
   Ftitle := Value;
+  // #005 hide caption if blank text supplied
+  if Ftitle>'' then
+  begin
+  rcOuterTitle.Visible:=True;      //#005
   txtTitle.Text := Ftitle;
   rcTitle.Width:=txtTitle.Width+7;
   rcTitle.Height:=txtTitle.Height+3;
   rcTitle.Position.Y:=rcOuterContent.Position.y;
   rcTitle.Position.X:=rcOuterContent.Position.x;
+  rcOuterTitle.Height:=txtTitle.Height+4;  //#005
   for I := 0 to rcContent.ControlsCount - 1 do
   begin
     Child := rcContent.Controls[I];
@@ -185,6 +232,9 @@ var
       (rcContent.Controls[I] as TCheckBox).OnClick := DoCheckBoxClick;
     end;
   end;
+  end else
+  // #005 hide
+  rcOuterTitle.Visible:=false;
 end;
 
 procedure TCBGroupBoxObj.DoCheckBoxClick(Sender: TObject);
