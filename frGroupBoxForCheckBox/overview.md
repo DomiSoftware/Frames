@@ -1,4 +1,4 @@
-I needed to process a group of checkboxes, and to determine which had been checked, this frame does this and returns a handy TArray<string> of the checkbox names that have been selected.
+I needed to process a group of checkboxes, and to determine which had been checked, this frame does this and returns a TArray<string> or TArray<TCheckbox> of the checkbox names that have been selected.
 
 Features (set by properties):
 1) It can be set for either single or multiple selection
@@ -6,6 +6,7 @@ Features (set by properties):
 3) Coloured helpers for design 
 4) Content changed so allignment can be used by user 
 5) Customisable padding for content
+6) [ver 5] allows checklist usage, now can return unchecked items
 
 Usage: just add the frame to your form resize as you need, and layout your checkboxes to it in the order you wish
 
